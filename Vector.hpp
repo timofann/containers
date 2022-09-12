@@ -77,6 +77,14 @@ namespace ft {
 			return dst;
 		};
 
+		template< typename V >
+		void
+		swapValues(V& first_value, V& second_value) {
+			V tmp_value = first_value;
+			first_value = second_value;
+			second_value = tmp_value;
+		}
+
 	public:
 
 		Vector() : arr_(nullptr), size_(0),
@@ -223,6 +231,19 @@ namespace ft {
 
 		allocator_type
 		get_allocator() const { return alloc_; }
+
+		void
+		swap(Vector& other) {
+			value_type* tmp_arr = this->arr_;
+			this->arr_ = other.arr_;
+			other.arr_ = tmp_arr;
+			size_type tmp_size = this->size_;
+			this->size_ = other.size_;
+			other.size_ = tmp_size;
+			tmp_size = this->capacity_;
+			this->capacity_ = other.capacity_;
+			other.capacity_ = tmp_size;
+		};
 
 //		template< class InputIt >
 //		void assign( InputIt first, InputIt last );
