@@ -3,12 +3,15 @@
 #define VECTOR_HPP
 #include <memory>
 #include <cstdlib>
-#include <vector>
+//#include <vector>
+#include <iostream>
+
+#include "iterators.hpp"
 
 namespace ft {
 
 	template< class T, class Allocator = std::allocator<T> >
-	class Vector {
+	class vector {
 
 	public:
 
@@ -21,17 +24,18 @@ namespace ft {
 		typedef const value_type &const_reference;
 		typedef typename Allocator::pointer pointer;
 		typedef typename Allocator::const_pointer const_pointer;
-		typedef typename std::vector<T, Allocator>::iterator iterator;
-		typedef typename std::vector<T, Allocator>::const_iterator const_iterator;
-		typedef std::reverse_iterator<iterator> reverse_iterator;
-		typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+//		typedef std::reverse_iterator<iterator> reverse_iterator;
+//		typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef ft::InputIterator<false, value_type> iterator;
+		typedef ft::InputIterator<true, value_type> const_iterator;
+
 
 	private:
 
 		value_type *arr_;
 		size_type size_;
 		size_type capacity_;
-		const Allocator &alloc_;
+		Allocator alloc_;
 
 		void
 		cleanVector() {
@@ -87,15 +91,15 @@ namespace ft {
 
 	public:
 
-		Vector() : arr_(nullptr), size_(0),
+		vector() : arr_(nullptr), size_(0),
 		           capacity_(0),  alloc_(Allocator()) {};
 
 		explicit
-		Vector(const Allocator &alloc) : arr_(nullptr), size_(0),
+		vector(const Allocator &alloc) : arr_(nullptr), size_(0),
 		                                 capacity_(0),  alloc_(alloc) {};
 
 		explicit
-		Vector(size_type count, const_reference value = value_type(),
+		vector(size_type count, const_reference value = value_type(),
 		       const Allocator &alloc = Allocator()) : size_(count),
 		                                               capacity_(count),
 		                                               alloc_(alloc) {
@@ -106,7 +110,7 @@ namespace ft {
 		};
 
 		template<class InputIt>
-		Vector(InputIt first, InputIt last,
+		vector(InputIt first, InputIt last,
 		       const Allocator &alloc = Allocator()) : alloc_(alloc) {
 			InputIt first2(first);
 			size_ = 0;
@@ -119,9 +123,9 @@ namespace ft {
 			// [i] на сколько сдвигает указатель? // не понятно, нужен все-таки адрес или объект
 		};
 
-		Vector(const Vector &other) : arr_(nullptr), size_(0),
+		vector(const vector &other) : arr_(nullptr), size_(0),
 		                              capacity_(0),  alloc_(Allocator()) {
-			arr_ = copyVector(other.arr_, other.size_, other.capacity_);
+			arr_ = copyvector(other.arr_, other.size_, other.capacity_);
 			size_ = other.size_;
 			capacity_ = other.capacity_;
 		};
@@ -136,7 +140,7 @@ namespace ft {
 		reserve(size_type new_cap) {
 			if (new_cap < capacity_)
 				return;
-			value_type *new_arr = copyVector(arr_, size_, new_cap);
+			value_type *new_arr = copyvector(arr_, size_, new_cap);
 			cleanVector();
 			arr_ = new_arr;
 			size_ = std::min(new_cap, size_);
@@ -145,10 +149,10 @@ namespace ft {
 
 		void
 		resize(size_type count, value_type value = T()) {
-			value_type *new_arr = copyVector(arr_, size_, count);
+			value_type *new_arr = copyvector(arr_, size_, count);
 			if (count > size_) {
 				try {
-					fillVector(new_arr + size_, count - size_, value);
+					fillvector(new_arr + size_, count - size_, value);
 				} catch (...) {
 					alloc_.deallocate(new_arr, count);
 					throw;
@@ -188,11 +192,11 @@ namespace ft {
 			return arr_[i];
 		}
 
-		Vector&
-		operator=(const Vector& other) {
+		vector&
+		operator=(const vector& other) {
 			if (this == &other)
 				return *this;
-			value_type *new_arr = copyVector(other.arr_, other.size_, other.capacity_);
+			value_type *new_arr = copyvector(other.arr_, other.size_, other.capacity_);
 			cleanVector();
 			arr_ = new_arr;
 			size_ = other.size_;
@@ -211,7 +215,7 @@ namespace ft {
 		assign(size_type count, const_reference value) {
 			value_type *new_arr = initVector(count);
 			try {
-				fillVector(new_arr, count, value);
+				fillvector(new_arr, count, value);
 			} catch (...) {
 				alloc_.deallocate(new_arr, count);
 				throw;
@@ -233,7 +237,7 @@ namespace ft {
 		get_allocator() const { return alloc_; }
 
 		void
-		swap(Vector& other) {
+		swap(vector& other) {
 			value_type* tmp_arr = this->arr_;
 			this->arr_ = other.arr_;
 			other.arr_ = tmp_arr;
@@ -253,10 +257,10 @@ namespace ft {
 				*pos = *pos + 1;
 		};*/
 //	iterator erase(iterator first, iterator last) {};
-		~Vector() { cleanVector(); };
+		~vector() { cleanVector(); };
 	};
 
 };
-// переделать copyVector на строгую гарантию и 2 входных параметра
+// переделать copyvector на строгую гарантию и 2 входных параметра
 
 #endif
