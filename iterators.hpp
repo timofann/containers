@@ -38,32 +38,35 @@ namespace ft {
 //		struct conditional<false, T1, T2> { typedef T1 type; };
 
 	public:
-		explicit Iterator() : _ptr(0) {};
-		explicit Iterator(value_type* ptr) : _ptr(ptr) {};
-		Iterator(const Iterator<true, T, Category>& copy) { _ptr = copy._ptr; };
+		Iterator() : _ptr(0) {}; //explicit
+		Iterator(value_type* ptr) : _ptr(ptr) {}; //explicit
+		Iterator(const Iterator<true, T, Category>& copy) { _ptr = copy._ptr; }; // неправильно
 		Iterator(const Iterator<false, T, Category>& copy) { _ptr = copy._ptr; };
-		Iterator &operator=(const Iterator<true, T, Category>& copy) {
+		Iterator &operator=(const Iterator<true, T, Category>& copy) { //  неправильно
 			_ptr = copy._ptr;
 			return *this;
 		};
+
 		Iterator&
 		operator=(const Iterator<false, T, Category>& copy) {
 			_ptr = copy._ptr;
 			return *this;
 		};
+
 		typename ft::conditional<IsConst, Iterator, const Iterator>::type&
 		operator++() {
 			++_ptr;
 			return *this;
 		};
+
 		typename ft::conditional<IsConst, reference, const_reference>::type
 		operator*() const { return *_ptr; };
-		~Iterator() {};
+		virtual ~Iterator() {};
 
 	}; // class Iterator
 
 
-	template <bool IsConst, typename T>
+	template <bool IsConst, typename T, typename Category = input_iterator_tag>
 	class InputIterator : public Iterator< IsConst, T, input_iterator_tag> {
 	public:
 		typedef typename Iterator< IsConst, T, input_iterator_tag>::value_type value_type;
@@ -76,22 +79,20 @@ namespace ft {
 		typedef typename Iterator< IsConst, T, input_iterator_tag>::const_reference const_reference;
 
 	public:
-		explicit InputIterator() : Iterator<IsConst, T, input_iterator_tag>() {};
-		explicit InputIterator(value_type* ptr) : Iterator<IsConst, T, input_iterator_tag>(ptr) {};
+		InputIterator() : Iterator<IsConst, T, input_iterator_tag>() {}; //explicit
+		InputIterator(value_type* ptr) : Iterator<IsConst, T, input_iterator_tag>(ptr) {}; //explicit
+		~InputIterator() {};
 
 		InputIterator &operator=(const InputIterator& copy) {
 			Iterator<IsConst, T, input_iterator_tag>::operator=(copy);
 			return *this;
 		};
 
-		typename ft::conditional<IsConst, reference, const_reference>::type
-		operator*() const;
-
-		typename ft::conditional<IsConst, InputIterator, const InputIterator>::type&
-		operator++() {
-			++Iterator<IsConst, T, input_iterator_tag>::_ptr;
-			return *this;
-		};
+//		typename ft::conditional<IsConst, reference, const_reference>::type
+//		operator*() const;
+//
+//		typename ft::conditional<IsConst, InputIterator, const InputIterator>::type&
+//		operator++();
 
 		const InputIterator operator++(int) {
 			InputIterator tmp = *this;
@@ -107,9 +108,10 @@ namespace ft {
 			return Iterator<IsConst, T, input_iterator_tag>::_ptr != other.Iterator<IsConst, T, input_iterator_tag>::_ptr;
 		};
 
-//		using Iterator<IsConst, T, input_iterator_tag>::operator++;
-
 	}; // class InputIterator
+
+
+
 
 
 } // namespace ft
