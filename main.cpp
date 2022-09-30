@@ -62,10 +62,11 @@ int main() {
 	vec[1] = "2";
 	vec[2] = "3";
 
-	std::vector<std::string>::const_iterator it6;
+//	std::vector<std::string>::const_iterator it6;
 //	std::vector<std::string>::iterator it5;
-//	std::vector<std::string>::iterator it9(it5);
-
+//	std::vector<std::string>::iterator it9(it6);
+//	std::vector<std::string>::const_iterator it10(it5);
+//
 //	ft::InputIterator<true, std::string> it6(x);
 //	ft::InputIterator<false, std::string> it5(x);
 //	ft::InputIterator<true, std::string> it9(it5); // не хочу ошибку тут
@@ -87,12 +88,14 @@ int main() {
 	std::cout << (it7 != it8) << std::endl;
 */
 
-	ft::Iterator<false, std::string, ft::input_iterator_tag> it11;
-	ft::Iterator<true, std::string, ft::input_iterator_tag> it12;
-	ft::Iterator<false, std::string, ft::input_iterator_tag> it13(it11);
-	ft::Iterator<true, std::string, ft::input_iterator_tag> it14(it12);
-	ft::Iterator<false, std::string, ft::input_iterator_tag> it15(it12); // не работать
-	ft::Iterator<true, std::string, ft::input_iterator_tag> it16(it11);
+//	ft::Iterator<false, std::string, ft::input_iterator_tag> it11;
+//	ft::Iterator<true, std::string, ft::input_iterator_tag> it12;
+//	ft::Iterator<false, std::string, ft::input_iterator_tag> it13(it11);
+//	ft::Iterator<true, std::string, ft::input_iterator_tag> it14(it12);
+//	ft::Iterator<false, std::string, ft::input_iterator_tag> it15(it12); // не работать
+//	ft::Iterator<true, std::string, ft::input_iterator_tag> it16(it11);
+
+
 
 	return 0;
 }
